@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Samus : MonoBehaviour
 {
+    GameManager gameManager;
     public Transform projectileSpawnPoint;
     public Transform projectileSpawnPointUp;
     public BeamProjectile beamProjectilePrefab;
@@ -67,7 +68,7 @@ public class Samus : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
+        gameManager = GameObject.Find("HUD").GetComponent<GameManager>();
         if (!projectileSpawnPoint)
             Debug.LogError("Missing projectileSpawn");
         //if (!projectilePrefab)
@@ -152,8 +153,25 @@ public class Samus : MonoBehaviour
             // Prints a message to Console (Shortcut: Control+Shift+C)
             Debug.LogError("Animator not found on " + name);
         }
+
+        if(!samSource)
+        samSource = GameObject.Find("SamSource").GetComponent<AudioSource>();
     }
 
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        if(col.gameObject.tag == "Enemy")
+        {
+            energy -= 5;
+        }
+    }
+    void OnTriggerStay2D(Collider2D col)
+    {
+        if(col.gameObject.tag == "Enemy")
+        {
+            energy--;
+        }
+    }
 
     // Update is called once per frame
     void Update()
@@ -177,7 +195,7 @@ public class Samus : MonoBehaviour
                 jump = true;
         }
 
-        if(useRocketButton && maxRockets > 0 && !isRocketMode)
+        if(useRocketButton && maxRockets > 0 && !isRocketMode && rockets > 0)
         {
             isRocketMode = true;
         }else if ((isRocketMode && useRocketButton )|| rockets == 0)
@@ -221,6 +239,7 @@ public class Samus : MonoBehaviour
             {
                 fireRocket();
                 rockets--;
+                gameManager.rockets = rockets;
             }
             else
             {
@@ -315,6 +334,9 @@ public class Samus : MonoBehaviour
         anim.SetBool("ballMode", isBall);
         anim.SetBool("aimUp", aimUp);
         anim.SetBool("rocketMode", isRocketMode);
+
+        gameManager.energy = energy;
+        gameManager.rockets = rockets;
     }
 
 
@@ -361,7 +383,7 @@ public class Samus : MonoBehaviour
         {
             temp.speed = projectileForce;
         }
-        PlaySound(beamSnd, 1.0f);
+        PlaySingleSound(beamSnd, 1.0f);
     }
 
    void fireRocket()
@@ -405,14 +427,15 @@ public class Samus : MonoBehaviour
         {
             temp.speed = rocketForce;
         }
-        PlaySound(rocketSnd, 1.0f);
+        PlaySingleSound(rocketSnd, 1.0f);
     }
    
-    public void PlaySound(AudioClip clip, float volume=1.0f)
+    public void PlaySingleSound(AudioClip clip, float volume=1.0f)
     {
         samSource.clip = clip;
         samSource.volume = volume;
         samSource.Play();
+        Debug.Log(clip);
     }
 
 }

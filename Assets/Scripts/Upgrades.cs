@@ -6,6 +6,7 @@ public class Upgrades : MonoBehaviour
 {
     public Samus samus;
     BoxCollider2D bc2D;
+    GameManager gameManager;
     // Start is called before the first frame update
     void Start()
     {
@@ -30,6 +31,24 @@ public class Upgrades : MonoBehaviour
         {
             samus.maxEnergy += 100;
             samus.energy += 100;
+            Destroy(this.gameObject);
+        }
+        if (col.gameObject.CompareTag("Player") && gameObject.CompareTag("Energy10"))
+        {
+            samus.energy += 10;
+            if(samus.energy> samus.maxEnergy)
+            {
+                samus.energy = samus.maxEnergy;
+            }
+            Destroy(this.gameObject);
+        }
+        if (col.gameObject.CompareTag("Player") && gameObject.CompareTag("Rockets3"))
+        {
+            samus.rockets += 3;
+            if(samus.rockets > samus.maxRockets)
+            {
+                samus.rockets = samus.maxRockets;
+            }
             Destroy(this.gameObject);
         }
         Debug.Log("OnCollisionEnter2D");

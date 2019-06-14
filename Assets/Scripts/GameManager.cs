@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour {
     int _energy;
     int _rockets;
     public Text energyText;
+    public Text rocketsText;
 
     // Used to instantiate 'Character'
     public GameObject playerPrefab;
@@ -35,7 +36,7 @@ public class GameManager : MonoBehaviour {
         }
 
         // Assign a starting energy
-        energy = 0;
+        _energy = 1;
         _rockets = 3;
 	}
 	
@@ -45,28 +46,42 @@ public class GameManager : MonoBehaviour {
         // Check if 'Escape' was pressed
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            // If player is on 'Screen_Title' (Scene Name)
-            if(SceneManager.GetActiveScene().name == "Screen_Title")
-                // Go to 'Level1' Scene
+            // If player is on 'StartScreen' (Scene Name)
+            if (SceneManager.GetActiveScene().name == "StartScreen")
+            {
+                // Go to 'Metroid-Remake' Scene
                 // - Scene must be loaded in Build Settings or it will not work
                 // - Build Settings are located at Menu Bar: Edit->Build Settings
                 // - Drag the Scenes in the project into 'Scenes in Build' space
-                SceneManager.LoadScene("Level1");
-
-            // If player is on 'Level1' (Scene Name)
-            else if (SceneManager.GetActiveScene().name == "Level1")
-                // Go to 'Screen_Title' Scene
+                SceneManager.LoadScene("Metroid-Remake");
+                this.enabled = false;
+            }
+            // If player is on 'Metroid-Remake' (Scene Name)
+            else if (SceneManager.GetActiveScene().name == "Metroid-Remake")
+            {
+                // Go to 'StartScreen' Scene
                 // - Scene must be loaded in Build Settings or it will not work
                 // - Build Settings are located at Menu Bar: Edit->Build Settings
                 // - Drag the Scenes in the project into 'Scenes in Build' space
-                SceneManager.LoadScene("Screen_Title");
-
+                SceneManager.LoadScene("StartScreen");
+                spawnPlayer(1);
+                this.enabled = true;
+            }
+            else if(SceneManager.GetActiveScene().name == "GameOver")
+            {
+                SceneManager.LoadScene("StartScreen");
+                this.enabled = false;
+            }
         }
-        if (_rockets == 0)
+        if (_energy <= 0)
         {
+            Debug.Log("Game Over");
             SceneManager.LoadScene("GameOver");
+            this.enabled = false;
         }
-	}
+
+    
+    }
 
     // Called when 'Character' is spawned
     public void spawnPlayer(int spawnLocation)
@@ -74,25 +89,25 @@ public class GameManager : MonoBehaviour {
     //public void spawnPlayer(Vector3 spawnLocation)
     //public void spawnPlayer(GameObject spawnLocation)
     {
-        // Requires spawnPoint to be named (SceneName)_(number)
-        // - Level1_0
-        string spawnPointName = SceneManager.GetActiveScene().name
-            + "_" + spawnLocation;
+        //// Requires spawnPoint to be named (SceneName)_(number)
+        //// - Metroid-Remake_0
+        //string spawnPointName = SceneManager.GetActiveScene().name
+        //    + "_" + spawnLocation;
 
-        // Find location to spawn 'Character' at
-        Transform spawnPointTransform = 
-            GameObject.Find(spawnPointName).GetComponent<Transform>();
+        //// Find location to spawn 'Character' at
+        //Transform spawnPointTransform = 
+        //    GameObject.Find(spawnPointName).GetComponent<Transform>();
 
-        // Check if 'playerPrefab' and 'spawnPointTransform' exist
-        if (playerPrefab && spawnPointTransform)
-        {
-            // Instantiate (Create) 'Character' GameObject
-            Instantiate(playerPrefab, spawnPointTransform.position,
-                spawnPointTransform.rotation);
-        }
-        else
-            // Prints a message to Console (Shortcut: Control+Shift+C)
-            Debug.LogError("Missing Player Prefab or SpawnPoint");
+        //// Check if 'playerPrefab' and 'spawnPointTransform' exist
+        //if (playerPrefab && spawnPointTransform)
+        //{
+        //    // Instantiate (Create) 'Character' GameObject
+        //    Instantiate(playerPrefab, spawnPointTransform.position,
+        //        spawnPointTransform.rotation);
+        //}
+        //else
+        //    // Prints a message to Console (Shortcut: Control+Shift+C)
+        //    Debug.LogError("Missing Player Prefab or SpawnPoint");
 
     }
 
@@ -109,8 +124,9 @@ public class GameManager : MonoBehaviour {
     // Gets called to Start game on button click
     public void StartGame()
     {
-        // Loads Level1 Scene
-        SceneManager.LoadScene("Level1");
+        // Loads Metroid-Remake Scene
+        SceneManager.LoadScene("Metroid-Remake");
+        spawnPlayer(1);
     }
 
     // Gets called to Quit game on button click
@@ -133,20 +149,19 @@ public class GameManager : MonoBehaviour {
             // Check if 'energyText' was set before trying to update HUD
             if (energyText)
                 // Update HUD on every energy change
-                energyText.text = "energy: " + energy;  
+                energyText.text = "Energy: " + energy;  
         }     
     }
     public int rockets
     {
         get { return _rockets; }      // can also use just 'get;'
         set
-        {
-            _rockets = value;       // can also use just 'set;'
+        {   _rockets = value;       // can also use just 'set;'
 
-            // Check if 'energyText' was set before trying to update HUD
-            //if (rocketsText)
-            //    // Update HUD on every energy change
-            //    rocketsText.text = "rockets: " + rockets;
+            // Check if 'rocketsText' was set before trying to update HUD
+            if (rocketsText)
+                // Update HUD on every energy change
+                rocketsText.text = "Rockets: " + rockets;
         }
     }
 }

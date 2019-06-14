@@ -4,5 +4,14 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/StartScreen.unity
+    guid: 9f693d2daf795f44fb46218937821082
+  - enabled: 1
+    path: Assets/Scenes/Metroid-Remake.unity
+    guid: 15e72bfa09d730a4f89aaca3134d4717
+  - enabled: 1
+    path: Assets/Scenes/GameOver.unity
+    guid: 8c62778b27380464ba2661f0c5b841f6
   m_configObjects: {}

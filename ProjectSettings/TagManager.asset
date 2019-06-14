@@ -13,6 +13,11 @@ TagManager:
   - Breakable
   - Red_Door
   - Rocket
+  - energyText
+  - rocketsText
+  - Enemy
+  - Energy10
+  - Rockets3
   layers:
   - Default
   - TransparentFX

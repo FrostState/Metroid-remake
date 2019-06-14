@@ -40,37 +40,37 @@ public class BeamProjectile : MonoBehaviour
     }
 
 
-    //void OnCollisionEnter2D(Collision2D col)
-    //{
-    //    if (col.gameObject.CompareTag("Wall"))
-    //    {
-    //        Destroy(gameObject);
-    //    }
-    //    //if (col.gameObject.CompareTag("Door"))
-    //    //{
-    //    //    Destroy(this.gameObject);
-    //    //}
-    //    if (col.gameObject.CompareTag("Enemy"))
-    //    {
-    //        Destroy(gameObject);
-    //    }
-    //}
-
-    void OnTriggerEnter2D(Collider2D other)
+    void OnCollisionEnter2D(Collision2D col)
     {
-        if (other.tag == "Wall")
+        if (col.gameObject.tag == "Wall")
         {
             Destroy(this.gameObject);
         }
-        else if (other.tag == "Door" || other.tag == "Red_Door")
+        if (col.gameObject.tag=="Door" || col.gameObject.tag == "Red_Door")
         {
             Destroy(this.gameObject);
         }
-        else if (other.tag == "Enemy")
+        if (col.gameObject.tag == "Enemy")
         {
             Destroy(this.gameObject);
         }
     }
+
+    //void OnTriggerEnter2D(Collider2D other)
+    //{
+    //    if (other.tag == "Wall")
+    //    {
+    //        Destroy(this.gameObject);
+    //    }
+    //    else if (other.tag == "Door" || other.tag == "Red_Door")
+    //    {
+    //        Destroy(this.gameObject);
+    //    }
+    //    else if (other.tag == "Enemy")
+    //    {
+    //        Destroy(this.gameObject);
+    //    }
+    //}
 
     // Update is called once per frame
     void Update()
